@@ -1,12 +1,5 @@
-import { Routes } from '@angular/router';
 import { Component } from '@angular/core';
-import { HomeComponent } from './home/home.component';
-import { DetailsComponent } from './details/details.component';
-
-export const routes: Routes = [
-  { path: '', component: HomeComponent },
-  { path: 'details', component: DetailsComponent }
-];
+import { RouterModule } from '@angular/router';
 @Component({
   standalone: true,
   selector: 'app-root',
@@ -17,13 +10,12 @@ export const routes: Routes = [
         alt="logo" aria-hidden="true">
       </header>
       <section class="content">
-        <app-home></app-home>
-        <app-details></app-details>
+        <router-outlet></router-outlet>
       </section>
     </main>
   `,
   styleUrls: ['./app.component.css'],
-  imports: [HomeComponent, DetailsComponent] 
+  imports: [ RouterModule] 
 })
 export class AppComponent {
   title = 'homes';
