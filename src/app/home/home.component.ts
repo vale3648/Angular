@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { HousingLocationComponent } from '../housing-location/housing-location.component';
 import { HousingLocation } from '../housing-location';
 import { HousingService } from '../housing.service';
+import { text } from 'stream/consumers';
 
 @Component({
   selector: 'app-home',
@@ -11,8 +12,8 @@ import { HousingService } from '../housing.service';
   template: `
     <section>
       <form>
-        <input type="text" placeholder="filter by city">
-        <button class="primary" type="button">search</button>
+        <input type="text" placeholder="filter by city" #filter>
+        <button class="primary" type="button" (click)="filterResults(filter.value)">search</button>
       </form>
     </section>
     <section class="results">
@@ -24,8 +25,21 @@ import { HousingService } from '../housing.service';
 export class HomeComponent {
   housingLocationList: HousingLocation [] = [];
   housingService: HousingService = inject (HousingService);
+  filteredLocationList:HousingLocation[] =[];
 
   constructor() {
-    this.housingLocationList = this.housingService.getAllHousingLocations();
+    this.housingService.getAllHousingLocations().then((housingLocationList: HousingLocation[])=>{
+      this.housingLocationList = housingLocationList;
+      this.filteredLocationList =housingLocationList;
+    });
   }
+
+  filterResults(text: string) {
+    if (!text) this. filteredLocationList = this.housingLocationList;
+  
+    this.filteredLocationList = this.housingLocationList.filter(
+      housingLocation => housingLocation?.city.toLowerCase().includes(text.toLowerCase())
+    );
+  }
+
 }
